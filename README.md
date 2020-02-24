@@ -1,12 +1,12 @@
-# Taller de clientes y servicios
+# Taller IoC
 
-Este proyecto tiene como objetivo realizar unos ejercicios que nos permitirán entender mejor como funcionan las herramientas de networking que posee java, además se implementará un servidor web en java, que puede manejar peticiones desde el navegador, en el cual se mostrará el recurso, dependiendo de la url ingresada. Finalmente el servidor web se desplegará en Heroku.
+Este proyecto tiene como objetivo implementar una nueva forma de programar, de tal manera que el código de la aplicación tenga un amayor desacoplamiento, esto se realiza por medio de un agente externo que permite realizar un llamado de los métodos que posean un anotación y así administrar la palicación de manera diferente.
 
 # Empezando
 
 Para descargar este proyecto en algún directorio, empezamos abriendo un ventana de consola, vamos al direcorio donde queremos que quede el proyecto y escribimos:
 
-``$ git clone https://github.com/migue1994/Taller-cliente-servicio-arep.git``
+``$ git clone https://github.com/migue1994/Taller-Arep-IoC.git``
 
 Nos empezará a descargar el contenido dentro de un repositorio local y así poderlo usar.
 
