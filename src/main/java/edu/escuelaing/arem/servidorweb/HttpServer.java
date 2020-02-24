@@ -1,5 +1,8 @@
 package edu.escuelaing.arem.servidorweb;
 
+import edu.escuelaing.arem.servidorweb.dataBase.DataBase;
+import edu.escuelaing.arem.servidorweb.load.LoadAll;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -19,16 +22,21 @@ public class HttpServer {
     private static Socket clientSocket;
     private static PrintWriter out;
     private static BufferedReader in;
+    private static LoadAll la;
 
     /**
      * Clase principal de la base del servidor web
+     *
      * @param args argumentos
      * @throws IOException Io exception
      */
     public static void main(String[] args) throws IOException {
+        la = new LoadAll();
+        la.start();
         doConect();
         listen();
     }
+
     /**
      * Realiza la conexión a la base de datos
      */
@@ -42,8 +50,10 @@ public class HttpServer {
             System.exit(1);
         }
     }
+
     /**
      * Se encarga de recibir las peticiones que son hechas por el navegador
+     *
      * @throws IOException
      */
     private static void listen() throws IOException {
@@ -73,6 +83,8 @@ public class HttpServer {
                 }
             }
 
+            System.out.println(la.isAResource(resource));
+
             if (!resource.equals("/favicon.ico")) {
                 if (!resource.equals("/")) {
                     if (resource.equals("/DataBase")) {
@@ -83,35 +95,39 @@ public class HttpServer {
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
-                        
-                    }else{
-                        readFile(out, clientSocket.getOutputStream() ,resource);
+                    }else if(la.isAResource(resource)){
+                        out.println("HTTP/1.1 200 \r\nAccess-Control-Allow-Origin: *\r\nContent-Type: text/html\r\n\r\n");
+                        out.println(la.loadResource(resource));
+                    }else {
+                        readFile(out, clientSocket.getOutputStream(), resource);
                     }
-                    
-                    
-                }else{
+
+
+                } else {
                     outputLine = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n" + "\r\n" + "<!DOCTYPE html>\n"
-                    + "<html>\n" + "<head>\n" + "<meta charset=\"UTF-8\">\n" + "<title>Title of the document</title>\n"
-                    + "</head>\n" + "<body>\n" + "<h1 style=\"text-align: center;\">Pagina principal</h1>" + "</body>\n" + "</html>\n" + inputLine;
+                            + "<html>\n" + "<head>\n" + "<meta charset=\"UTF-8\">\n" + "<title>Title of the document</title>\n"
+                            + "</head>\n" + "<body>\n" + "<h1 style=\"text-align: center;\">Pagina principal</h1>" + "</body>\n" + "</html>\n" + inputLine;
                     out.println(outputLine);
                 }
             }
 
-           
+
             out.close();
             in.close();
             clientSocket.close();
-            
+
         }
     }
+
     /**
      * Permite leer el reurso solocitado al servidor, dependiendo del tipo de extensión
-     * @param out Permite mostrar el contenido en el navegador
-     * @param ost Canal que permite el flujo de datos hacia el servidor
+     *
+     * @param out      Permite mostrar el contenido en el navegador
+     * @param ost      Canal que permite el flujo de datos hacia el servidor
      * @param resource Recurso solicitado del navegador
      * @throws IOException
      */
-    private static void readFile(PrintWriter out, OutputStream ost ,String resource) throws IOException {
+    private static void readFile(PrintWriter out, OutputStream ost, String resource) throws IOException {
 
         if (resource.contains(".jpg")) {
             readImage(out, ost, resource);
@@ -122,18 +138,17 @@ public class HttpServer {
     }
 
     /**
-     * 
-     * @param out Permite mostrar el contenido en el navegador
+     * @param out      Permite mostrar el contenido en el navegador
      * @param resource Recurso solicitado del navegador
      * @throws IOException Io exception
      */
-    public static void getFile(PrintWriter out, String resource) throws IOException { 
+    public static void getFile(PrintWriter out, String resource) throws IOException {
         String st;
         String res = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n" + "\r\n";
         File file = new File("src/main/resources" + resource);
         BufferedReader br = new BufferedReader(new FileReader(file));
 
-        while ((st = br.readLine()) != null){
+        while ((st = br.readLine()) != null) {
             res += st;
         }
 
@@ -143,14 +158,13 @@ public class HttpServer {
     }
 
     /**
-     * 
-     * @param out Permite mostrar el contenido en el navegador
+     * @param out       Permite mostrar el contenido en el navegador
      * @param outStream Canal que permite el flujo de datos hacia el servidor
-     * @param request Recurso solicitado del navegador
+     * @param request   Recurso solicitado del navegador
      * @throws IOException
      */
     private static void readImage(PrintWriter out, OutputStream outStream, String request) throws IOException {
-        File graphicResource= new File("src/main/resources" +request);
+        File graphicResource = new File("src/main/resources" + request);
         FileInputStream inputImage = new FileInputStream(graphicResource);
         byte[] bytes = new byte[(int) graphicResource.length()];
         inputImage.read(bytes);
@@ -168,6 +182,7 @@ public class HttpServer {
 
     /**
      * Permite leer el puerto, para poder desplegar la aplicación en heroku
+     *
      * @return Puerto de salida
      */
     static int getPort() {
