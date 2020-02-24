@@ -20,30 +20,19 @@ Para empezar, debemos asegurarnos que tenemos las herramientas necesarias para p
 
 # Ejecutar el proyecto
 
-Una vez que hayamos descargado el proyecto, abrimos una cmd y accedemos al directorio donde esta el proyecto, para ejecutar las partes del proyecto.
+Para poder ejecutar el proyecto, escribimos el siguiente comando en la consola:
 
-El proyecto consta de varios ejercicios, los cuales se deberán ejecutar por separado, acontinuación, se mostrará como ejecutar cada uno de ellos.
+``$mvn exec:java -Dexec.mainClass="package edu.escuelaing.arem.servidorweb.HttpSever``
 
-1. Ejercicio 1
-    - ``$ mvn exec:java -Dexec.mainClass="edu.escuelaing.arem.url.UrlPuntoUno"``
+El servidor contiene los siguientes recursos:
 
-2. Ejercicio 2. 
-
-    - ``$ mvn exec:java -Dexec.mainClass="edu.escuelaing.arem.url.UrlPuntoDos"``
-
-3. Ejercicio 3.
-
-    - ``$ mvn exec:java -Dexec.mainClass="edu.escuelaing.arem.Socket.EchoClient"`` -> Para ejecutar cliente
-    - ``$ mvn exec:java -Dexec.mainClass="edu.escuelaing.arem.Socket.EchoServer"`` -> Para ejecutar el servidor
-
-4. Reto 1 y 2
-
-    - ``$ mvn exec:java -Dexec.mainClass="edu.escuelaing.arem.servidorweb.HttpServer"``
-
-    Una vez se haya ejecutado el comando, se compilará el proyecto y nos aparecerá una pantalla que dice que el servidor esta listo para recibir una petición desde el navegador.
-
-    Los documentos que se encuentran disponibles son: Example1.html, paisaje1.jpg, paisaje2.jpg
-    y javascript index. Para poder abrir los archivos desde la aplicaión, basta con colocar el nombre de los archivos antes mencionados en la barra url del navegador.
+- /Example1.html
+- /JavaScriptIndex.html
+- /paisaje1.html
+- /paisaje2.html
+- /message.html
+- /image.html
+- /js.html
 
 
 # Herramientas usadas
